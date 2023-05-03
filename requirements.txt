@@ -1,0 +1,4 @@
+django
+wheel
+psycopg2-binary
+psycopg2
