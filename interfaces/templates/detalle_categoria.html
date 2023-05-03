@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ categoria.name }}</h1>
+
+  <ul>
+    <li>Importe total gastado: ${{ importe_total_gastado }}</li>
+    <li>Cantidad de movimientos: {{ cantidad_movimientos }}</li>
+
+    {% if importe_limite_presupuesto %}
+      <li>Importe límite del presupuesto: ${{ importe_limite_presupuesto }}</li>
+      <li>Importe disponible: ${{ importe_disponible }}</li>
+      <li>Porcentaje del presupuesto gastado: {{ porcentaje_gastado }}%</li>
+    {% endif %}
+  </ul>
+{% endblock %}
