@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Gastos por categoría</h1>
+<style>
+.progress {
+  height: 20px;
+  background-color: #e6e6e6;
+  border-radius: 10px;
+}
+
+.progress-bar {
+  background-color: purple;
+  border-radius: 10px;
+  color: white;
+}
+</style>
+<ul>
+{% for categoria in categorias %}
+    <li>
+        <h2>{{ categoria.name }}</h2>
+        <p>Gastado: ${{ gastado }}</p>
+        {% if categoria.limit %}
+        <p>Limite: ${{ categoria.limit }}</p>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: {{ porcentaje }}%;" aria-valuenow="{{ porcentaje }}" aria-valuemin="0" aria-valuemax="100">{{ porcentaje }}%</div>
+        </div>
+        {% else %}
+        <p>Cantidad de transacciones: {{ transacciones }}</p>
+        {% endif %}
+    </li>
+{% empty %}
+    <p>No hay categorías disponibles</p>
+{% endfor %}
+</ul>
+{% endblock %}
