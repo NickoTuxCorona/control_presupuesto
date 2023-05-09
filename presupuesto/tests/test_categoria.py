@@ -1,78 +1,121 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.http import JsonResponse
 import json
+from django.test import TestCase, Client
+from rest_framework import status
 from presupuesto.models import Categoria
+from presupuesto.serializers import CategoriaSerializer
+from django.urls import reverse
 
 
-class CategoriaViewsTestCase(TestCase):
+client = Client()
+
+class GetSingleCategoriaTest(TestCase):
+
     def setUp(self):
-        self.client = Client()
-        self.categoria1 = Categoria.objects.create(name='Categoria1')
-        self.categoria2 = Categoria.objects.create(name='Categoria2', limit=500)
-        self.categoria3 = Categoria.objects.create(name='Categoria3', limit=1000)
+        self.categoria1 = Categoria.objects.create(nombre="Categoria1", descripcion="Descripción de Categoría1")
+        self.serializer = CategoriaSerializer(instance=self.categoria1)
 
-    def test_set_categorias_POST(self):
-        data = [
-            {'name': 'Categoria4'},
-            {'name': 'Categoria5', 'limit': 200},
-            {'name': 'Categoria6', 'limit': 300},
-        ]
-        response = self.client.post(
-            reverse('set_categorias'),
-            data=json.dumps(data),
-            content_type='application/json',
+    def test_get_valid_single_categoria(self):
+        response = client.get('/categorias/' + str(self.categoria1.pk) + '/')
+        categoria = Categoria.objects.get(pk=self.categoria1.pk)
+        serializer = CategoriaSerializer(categoria)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_invalid_single_categoria(self):
+        response = client.get('/categorias/99/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CreateNewCategoriaTest(TestCase):
+
+    def setUp(self):
+        self.valid_payload = {
+            'nombre': 'Categoria2',
+            'descripcion': 'Descripción de Categoría2'
+        }
+        self.invalid_payload = {
+            'nombre': '',
+            'descripcion': ''
+        }
+
+    def test_create_valid_categoria(self):
+        response = client.post(
+            '/categorias/',
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {'status': 'success', 'message': 'Categorías creadas con éxito'})
-        self.assertEqual(Categoria.objects.count(), 6)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_set_categorias_GET(self):
-        response = self.client.get(reverse('set_categorias'))
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(), {'status': 'error', 'message': 'Error en el envío'})
-        self.assertEqual(Categoria.objects.count(), 3)
+    def test_create_invalid_categoria(self):
+        response = client.post(
+            '/categorias/',
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_get_categorias(self):
-        response = self.client.get(reverse('get_categorias'))
-        self.assertEqual(response.status_code, 200)
-        expected_data = {'categorias': [
-            {'id': self.categoria1.id, 'name': 'Categoria1', 'limit': None},
-            {'id': self.categoria2.id, 'name': 'Categoria2', 'limit': 500},
-            {'id': self.categoria3.id, 'name': 'Categoria3', 'limit': 1000},
-        ]}
-        self.assertEqual(response.json(), expected_data)
 
-    def test_get_categoria_exists(self):
-        response = self.client.get(reverse('get_categoria', args=[self.categoria1.id]))
-        self.assertEqual(response.status_code, 200)
-        expected_data = {'categoria': {'id': self.categoria1.id, 'name': 'Categoria1', 'limit': None}}
-        self.assertEqual(response.json(), expected_data)
+class UpdateSingleCategoriaTest(TestCase):
 
-    def test_get_categoria_does_not_exist(self):
-        response = self.client.get(reverse('get_categoria', args=[999]))
-        self.assertEqual(response.status_code, 404)
-        expected_data = {'status': 'error', 'message': 'La Categoria no existe'}
-        self.assertEqual(response.json(), expected_data)
+    def setUp(self):
+        self.categoria1 = Categoria.objects.create(nombre="Categoria1", 
+            descripcion="Descripción de Categoría1")
+        self.valid_payload = {
+            'nombre': 'Categoria1 Actualizada',
+            'descripcion': 'Descripción de Categoría1 Actualizada'
+        }
+        self.invalid_payload = {
+            'nombre': '',
+            'descripcion': ''
+        }
 
-    def test_update_categoria(self):
-        data = {'name': 'Nueva Categoria', 'limit': 1500}
+    def test_valid_update_categoria(self):
+        response = client.put(
+            '/categorias/' + str(self.categoria1.pk) + '/',
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        categoria = Categoria.objects.get(pk=self.categoria1.pk)
+        serializer = CategoriaSerializer(categoria)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_invalid_update_categoria(self):
+        response = client.put(
+            '/categorias/' + str(self.categoria1.pk) + '/',
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class PartialUpdateSingleCategoriaTest(TestCase):
+
+    def setUp(self):
+        self.categoria1 = Categoria.objects.create(nombre="Categoria1", 
+                descripcion="Descripción de Categoría1")
+        self.valid_payload = {
+            'descripcion': 'Descripción de Categoría1 Actualizada'
+        }
+        self.invalid_payload = {
+            'nombre': '',
+            'descripcion': ''
+        }
+
+    def test_valid_partial_update_categoria(self):
         response = self.client.patch(
-            reverse('update_categoria', args=[self.categoria2.id]),
-            data=json.dumps(data),
-            content_type='application/json',
+            reverse('categoria-detail', kwargs={'pk': self.categoria1.pk}),
+            data=self.valid_payload,
+            content_type='application/json'
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {'status': 'success', 'message': 'Categoria actualizada con éxito'})
-        self.categoria2.refresh_from_db()
-        self.assertEqual(self.categoria2.name, 'Nueva Categoria')
-        self.assertEqual(self.categoria2.limit, 1500)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['descripcion'], 
+            self.valid_payload['descripcion'])
 
-    def test_update_categoria_does_not_exist(self):
-        categoria_id = 9999
-        url = reverse('update-categoria', kwargs={'categoria_id': categoria_id})
-        data = {'name': 'Categoria de prueba', 'limit': 1000}
-        response = self.client.patch(url, data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json(), {'status': 'error', 'message': 'La Categoria no existe'})
-
+    def test_invalid_partial_update_categoria(self):
+        response = self.client.patch(
+            reverse('categoria-detail', kwargs={'pk': self.categoria1.pk}),
+            data=self.invalid_payload,
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
