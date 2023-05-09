@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "a1ede8c4-6815-41e1-ab6a-81ca96bc9dd1",
+		"name": "Pruebas control_presupuesto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Categoría",
+			"item": [
+				{
+					"name": "Categorías Insertar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"name\": \"Transportes\",\r\n\t\t\"limit\": 1000\r\n\t},\r\n\t{\r\n\t\t\"id\": 2,\r\n\t\t\"name\": \"Alimentacion\",\r\n\t\t\"limit\": 5000\r\n\t}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/categorias/set/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								"set",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorías Obtener todas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/categorias/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorías Obtener una",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/categorias/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorías Actualizar",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 10,\r\n\t\"name\": \"Alimentaciones\",\r\n\t\"limit\": 500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/categorias/update/10/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								"update",
+								"10",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Categorías Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"name\": \"Transportes\",\r\n\t\t\"limit\": 1000\r\n\t},\r\n\t{\r\n\t\t\"id\": 2,\r\n\t\t\"name\": \"Alimentacion\",\r\n\t\t\"limit\": 5000\r\n\t}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/categorias/delete/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								"delete",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categoría Copy",
+			"item": [
+				{
+					"name": "Transaccion Insertar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"description\": \"Uber\",\r\n\t\t\"category\": 1,\r\n\t\t\"amount\": 300,\r\n\t\t\"date\": \"2023-04-26\",\r\n\t\t\"ignore\": false\r\n\t},\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"description\": \"Burger King\",\r\n\t\t\"category\": 2,\r\n\t\t\"amount\": 500,\r\n\t\t\"ignore\": true\r\n\t},\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"description\": \"Taxi\",\r\n\t\t\"category\": 1,\r\n\t\t\"amount\": 300,\r\n\t\t\"ignore\": false\r\n\t},\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"description\": \"Restaurant Sol\",\r\n\t\t\"category\": 2,\r\n\t\t\"amount\": 300,\r\n\t\t\"ignore\": false\r\n\t}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/transacciones/set/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"transacciones",
+								"set",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaccion Obtener todas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/transacciones/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"transacciones",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaccion Obtener una",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/categorias/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"categorias",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaccion Actualizar",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"description\": \"Uber\",\r\n\t\"category\": 134,\r\n\t\"amount\": 300,\r\n\t\"date\": \"2023-04-26\",\r\n\t\"ignore\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/transacciones/update/1/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"transacciones",
+								"update",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaccion Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t{\r\n\t\t\"id\": 1,\r\n\t\t\"name\": \"Transportes\",\r\n\t\t\"limit\": 1000\r\n\t},\r\n\t{\r\n\t\t\"id\": 2,\r\n\t\t\"name\": \"Alimentacion\",\r\n\t\t\"limit\": 5000\r\n\t}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/transacciones/delete/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"transacciones",
+								"delete",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
