@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle del Movimiento{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+	<h1>Detalle del Movimiento</h1>
+    <div class="col-12 col-md-4 text-center">
+      <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center"
+        style="height: 150px; width: 150px;">
+      </div>
+	  
+    </div>
+    <div class="col-12 col-md-8">
+		<hr>
+      <h1>{{ transaccion_data.nombre_negocio }}</h1>
+      <p class="mb-0">{{ transaccion_data.fecha }} {{ transaccion_data.hora }}</p>
+	  <h3 class="h2 mt-2">${{ transaccion_data.importe }}</h3>
+	  <hr>
+      <h2 class="mt-4">Categoría:</h2>
+      <h3>{{ transaccion_data.categoria }}</h3>
+	  <hr>
+      <h3 class="mt-4">Ignorar Movimiento</h3>
+      <label class="switch">
+		{% csrf_token %}
+        <input type="checkbox" id="ignore-toggle" 
+		{% if transaccion_data.ignorado %}checked{% endif %} 
+		onchange="toggleIgnorado()">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function toggleIgnorado() {
+  var isChecked = document.getElementById("ignore-toggle").checked;
+  var transactionId = "{{ transaccion_data.id }}";
+  var url = "/transacciones/detalle/" + transactionId + "/";
+  var csrfToken = getCookie('csrftoken');
+  fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify({ ignorado: !isChecked }),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrfToken
+    }
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.log(error));
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+{% endblock %}

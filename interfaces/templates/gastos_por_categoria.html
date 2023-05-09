@@ -1,36 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Gastos por categoría</h1>
-<style>
-.progress {
-  height: 20px;
-  background-color: #e6e6e6;
-  border-radius: 10px;
-}
-
-.progress-bar {
-  background-color: purple;
-  border-radius: 10px;
-  color: white;
-}
-</style>
-<ul>
-{% for categoria in categorias %}
-    <li>
-        <h2>{{ categoria.name }}</h2>
-        <p>Gastado: ${{ gastado }}</p>
-        {% if categoria.limit %}
-        <p>Limite: ${{ categoria.limit }}</p>
-        <div class="progress">
-          <div class="progress-bar" role="progressbar" style="width: {{ porcentaje }}%;" aria-valuenow="{{ porcentaje }}" aria-valuemin="0" aria-valuemax="100">{{ porcentaje }}%</div>
-        </div>
-        {% else %}
-        <p>Cantidad de transacciones: {{ transacciones }}</p>
-        {% endif %}
-    </li>
-{% empty %}
-    <p>No hay categorías disponibles</p>
-{% endfor %}
-</ul>
+  <h1>Gastos por categoría</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Categoría</th>
+        <th>Importe total gastado</th>
+        <th>Cantidad de movimientos</th>
+        <th>Importe límite</th>
+        <th>Porcentaje gastado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for categoria in data %}
+        <tr>
+          <td>{{ categoria.nombre_categoria }}</td>
+          <td>{{ categoria.importe_total_gastado }}</td>
+          <td>{{ categoria.cantidad_movimientos }}</td>
+          <td>{% if categoria.importe_limite_categoria %}${{ categoria.importe_limite_categoria }}{% endif %}</td>
+          <td>
+            {% if categoria.porcentaje_gastado is not None %}
+              {{ categoria.porcentaje_gastado|floatformat:2 }}%
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

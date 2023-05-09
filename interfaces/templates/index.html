@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>PruebaTecnica - Instrucciones</title>
+</head>
+<body>
+	<h1>PruebaTecnica</h1>
+	<p>Hola a todos traté de abarcar la mayor parte del contenido de la prueba.</p>
+	<p>Preparé la propuesta conforme al ejercicio, separé el proyecto en dos partes, una donde se manejan los modelos, con sus respectivas operaciones CRUD con sus respectivos tests, llamada "presupuesto" y otra llamada "interfaces" donde se consume esta otra aplicación, las interfaces tienen un front sencillo debido al tiempo.</p>
+	<ul>
+		<li>La base de datos que se está manejando es postgresql en su versión mas reciente, la conexión se hace mediante psycopg2.</li>
+		<li>Se desactivó temporalmente la autenticación "CSRF" para evitar el manejo de usuarios o tokens debido al tiempo, sin embargo se creó un método para la creación de usuarios que puede ser utilizado posteriormente.</li>
+	</ul>
+
+	<h2>Para ejecutar el proyecto</h2>
+
+	<h3>1. Entorno de ejecución</h3>
+	<p>Debe descargarse, posicionarse en la rama "main".</p>
+	<p>En caso de utilizar un entorno virtual deberá crearlo primero, desde la terminal (linux) ejecutar:</p>
+	<pre><code>python3 -m venv nombre_del_entorno</code></pre>
+	<p>y posteriormente activarlo:</p>
+	<pre><code>source nombre_del_entorno/bin/activate</code></pre>
+	<p>Una vez dentro del entorno virtual verificamos que exista la variable "PYTHONPATH". Desde la terminal:</p>
+	<pre><code>echo $PYTHONPATH</code></pre>
+	<p>En caso de que esté vacía o no devuelva la ruta de "site-packages", ejecutar el siguiente comando:</p>
+	<pre><code>python -m site</code></pre>
+	<p>Esto devolverá las rutas de Python, tomamos la ruta de "site-packages" que debe verse como:</p>
+	<pre><code>'/home/user/nombre_del_entorno/lib/python3.9/site-packages'</code></pre>
+	<p>Copiamos la ruta a la variable local:</p>
+	<pre><code>export PYTHONPATH="${PYTHONPATH}:/home/user/nombre_del_entorno/lib/python3.9/site-packages"</code></pre>
+	<p>Igual ejecutamos en caso de no tener instalado los paquetes de desarrollo de Python:</p>
+	<pre><code>sudo apt-get install libpq-dev python-dev</code></pre>
+	<p>Esto evitará futuros percances con la base de datos de Postgresql.</p>
+	<p>En caso de no tener una base de datos Postgres, recomiendo crear una en Docker por comodidad, para este caso la vamos a llamar "prueba" para que pueda ejecutarse como en el ejercicio:</p>
+	<pre><code>docker run --name prueba -e POSTGRES_PASSWORD=contraseña --publish 5432:5432 -d postgres</code></pre>
+
+	<h3>2. Ejecución</h3>
+	<p>Una vez localizados dentro de la carp

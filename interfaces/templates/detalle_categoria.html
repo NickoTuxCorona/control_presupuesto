@@ -1,16 +1,33 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-  <h1>{{ categoria.name }}</h1>
-
-  <ul>
-    <li>Importe total gastado: ${{ importe_total_gastado }}</li>
-    <li>Cantidad de movimientos: {{ cantidad_movimientos }}</li>
-
-    {% if importe_limite_presupuesto %}
-      <li>Importe límite del presupuesto: ${{ importe_limite_presupuesto }}</li>
-      <li>Importe disponible: ${{ importe_disponible }}</li>
-      <li>Porcentaje del presupuesto gastado: {{ porcentaje_gastado }}%</li>
+    <h1>{{ categoria_data.nombre_categoria }}</h1>
+    <h2>Resumen de la categoría</h2>
+    <p>Total gastado: {{ categoria_data.importe_total_gastado }}</p>
+    <p>Cantidad de movimientos: {{ categoria_data.cantidad_movimientos }}</p>
+    <p>Límite de la categoría: {{ categoria_data.importe_limite_categoria }}</p>
+    {% if categoria_data.importe_disponible %}
+        <p>Importe disponible: {{ categoria_data.importe_disponible }}</p>
+        <p>Porcentaje gastado: {{ categoria_data.porcentaje_gastado }}%</p>
     {% endif %}
-  </ul>
+    <h2>Movimientos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movimiento in categoria_data.movimientos %}
+                <tr>
+                    <td>{{ movimiento.description }}</td>
+                    <td>{{ movimiento.date }}</td>
+                    <td>  ${{ movimiento.amount }}</td>
+                </tr>
+                <tr><td><hr></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
